@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import pool from './config/db.js';
 import userRoutes from './routes/userRoutes.js'
+import authRoutes from './routes/authRoutes.js'
+import productRoutes from './routes/productRoutes.js'
 
 
 
@@ -14,6 +16,8 @@ app.use(express.json());
 
 
 app.use('/api', userRoutes);
+app.use('/api',authRoutes);
+app.use('/api',productRoutes);
 
 
 async function checkDatabaseConnection() {
