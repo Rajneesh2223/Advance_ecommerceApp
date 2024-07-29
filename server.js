@@ -6,6 +6,8 @@ import userRoutes from './routes/userRoutes.js'
 import authRoutes from './routes/authRoutes.js'
 import productRoutes from './routes/productRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
+import adminRoutes from './routes/adminRoutes.js'
+import vendorRoutes from './routes/vendorRoutes.js'
 
 
 
@@ -20,6 +22,8 @@ app.use('/api', userRoutes);
 app.use('/api',authRoutes);
 app.use('/api',productRoutes);
 app.use('/api',orderRoutes);
+app.use('/admin',adminRoutes)
+app.use('/api', vendorRoutes);
 
 
 async function checkDatabaseConnection() {

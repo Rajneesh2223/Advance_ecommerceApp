@@ -40,7 +40,7 @@ export const orderTrackingById = async (req, res) => {
         res.status(500).json({ error: 'Failed to retrieve order' });
     }
 }
-
+// updating the status of the order 
 export const updateOrderStatus = async (req, res) => {
     const { status } = req.body;
     const { orderId } = req.params;
@@ -55,3 +55,4 @@ export const updateOrderStatus = async (req, res) => {
         res.status(500).json({ error: 'Failed to update order status' });
     }
 }
+

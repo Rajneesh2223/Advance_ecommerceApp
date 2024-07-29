@@ -1,23 +1,38 @@
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
+import pool from '../config/db.js';
 
-export const verifyToken =(req,res,next)=>{
-
-    const token = req.headers.authorization?.split(' ')[1];
-    if(!token){
-        return res.status(401).json({ message: 'Unauthorized' });
+export const authenticateToken = async (req, res, next) => {
+    const authHeader = req.header('Authorization');
+    if (!authHeader) {
+        return res.status(401).json({ message: 'Access Denied: No Authorization header provided' });
     }
-    try{
-        const decoded = jwt.verify(token, process.env.JWT_KEY);
-        req.user = decoded
+
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+        return res.status(401).json({ message: 'Access Denied: No token provided' });
+    }
+
+    try {
+        const user = jwt.verify(token, process.env.JWT_KEY);
+        req.user = user;
+
+        // Fetch user from the database to check role
+        const [rows] = await pool.query('SELECT * FROM users WHERE id = ?', [user.id]);
+        if (rows.length === 0) {
+            return res.status(401).json({ message: 'User not found' });
+        }
+        console.log(rows)
+
+        req.user.role = rows[0].role;
         next();
-    }catch(err){
-        res.status(401).json({ message: 'Invalid token' });
+    } catch (err) {
+        return res.status(403).json({ message: 'Invalid Token' });
     }
-    
-}
+};
+
 export const isAdmin = (req, res, next) => {
     if (req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Forbidden' });
+        return res.status(403).json({ message: 'Access Denied: Admins only' });
     }
     next();
-  };
+};

@@ -1,16 +1,19 @@
-import express from 'express'
-import {createUser,getUser,updateUser ,deleteUser}  from '../controllers/userController.js'
+import express from 'express';
+import { createUser, getUser, updateUser, deleteUser } from '../controllers/userController.js';
+import { authenticateToken, isAdmin } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-router.post('/users',createUser);
+// Route to create a new user
+router.post('/users', createUser);
 
-// router to get user by id 
-router.get('/users/:id',getUser);
+// Route to get a user by id
+router.get('/users/:id', authenticateToken, isAdmin, getUser);
 
-// router to update the user 
-router.put('/users/:id',updateUser);
+// Route to update a user
+router.put('/users/:id', authenticateToken, isAdmin, updateUser);
 
-router.delete('/users/:id',deleteUser);
+// Route to delete a user
+router.delete('/users/:id', authenticateToken, isAdmin, deleteUser);
 
 export default router;

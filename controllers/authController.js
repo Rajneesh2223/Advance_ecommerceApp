@@ -5,6 +5,7 @@ import pool from '../config/db.js';
 // Register user
 export  async function registerUser(req, res) {
   const { email, username, password_hash, role } = req.body;
+  console.log(req.body);
   if (!username || !password_hash || !role || !email) {
     return res.status(400).json({ message: 'All fields are required' });
   }
@@ -27,12 +28,11 @@ export  async function registerUser(req, res) {
 // login user 
 export  async function loginUser(req,res){
   const {email, password} = req.body;
-  
-  if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password are required' });
-  }
-
+  console.log(req.body);
+ 
   try{
+    
+  
        const [row] = await pool.query(
         `
         SELECT * FROM users WHERE email = ? 
@@ -41,7 +41,7 @@ export  async function loginUser(req,res){
           return res.status(401).json({ message: 'Invalid credentials' });
         }
         const user = row[0];
-        console.log("user",user)
+     
         const passwordMatch =await bcrypt.compare(password , user.password_hash);
         if (!passwordMatch) {
           return res.status(401).json({ message: 'Invalid credentials' });
