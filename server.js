@@ -5,6 +5,7 @@ import pool from './config/db.js';
 import userRoutes from './routes/userRoutes.js'
 import authRoutes from './routes/authRoutes.js'
 import productRoutes from './routes/productRoutes.js'
+import orderRoutes from './routes/orderRoutes.js'
 
 
 
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use('/api', userRoutes);
 app.use('/api',authRoutes);
 app.use('/api',productRoutes);
+app.use('/api',orderRoutes);
 
 
 async function checkDatabaseConnection() {
